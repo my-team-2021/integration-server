@@ -102,4 +102,17 @@ public class EquipmentInfoController extends BaseController
     {
         return toAjax(equipmentInfoService.deleteEquipmentInfoByIds(ids));
     }
+
+    /**
+     * 导出设备二维码信息
+     */
+//    @PreAuthorize(hasPermi = "system:equpiment:qrCodeExport")
+    @Log(title = "导出设备二维码信息", businessType = BusinessType.EXPORT)
+    @PostMapping("/qrCodeExport")
+    public void qrCodeExport(HttpServletResponse response, EquipmentInfo equipmentInfo) throws IOException
+    {
+        List<EquipmentInfo> list = equipmentInfoService.selectEquipmentInfoList(equipmentInfo);
+        ExcelUtil<EquipmentInfo> util = new ExcelUtil<EquipmentInfo>(EquipmentInfo.class);
+        util.exportExcel(response, list, "equpiment");
+    }
 }

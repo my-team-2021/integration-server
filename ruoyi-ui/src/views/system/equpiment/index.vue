@@ -118,6 +118,16 @@
           v-hasPermi="['system:equpiment:export']"
         >导出</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+            type="warning"
+            plain
+            icon="el-icon-download"
+            size="mini"
+            @click="handleQrCodExport"
+            v-hasPermi="['system:equpiment:qrCodeExport']"
+        >设备二维码导出</el-button>
+      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -368,7 +378,34 @@ export default {
       this.download('system/equpiment/export', {
         ...this.queryParams
       }, `system_equpiment.xlsx`)
+    },
+    /** 导出设备二维码按钮操作 */
+    handleQrCodExport() {
+      this.getUrlBase64('https://cdn.jsdelivr.net/gh/looly/hutool-site/docs/extra/images/qrcodeCustom.jpg').then(base64 => {
+        let link = document.createElement('a')
+        link.href = 'data:image/png;base64,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'
+        link.download = 'qrCode.png'
+        link.click()
+      })
+    },
+    getUrlBase64(url) {
+      return new Promise(resolve => {
+        let canvas = document.createElement('canvas')
+        let ctx = canvas.getContext('2d')
+        let img = new Image()
+        img.crossOrigin = 'Anonymous' //允许跨域
+        img.src = url
+        img.onload = function() {
+          canvas.height = 300
+          canvas.width = 300
+          ctx.drawImage(img, 0, 0, 300, 300)
+          let dataURL = canvas.toDataURL('image/png')
+          canvas = null
+          resolve(dataURL)
+        }
+      })
     }
+
   }
 };
 </script>
