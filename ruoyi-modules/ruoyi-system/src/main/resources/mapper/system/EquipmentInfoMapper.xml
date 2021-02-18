@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.EquipmentInfoMapper">
+    
+    <resultMap type="EquipmentInfo" id="EquipmentInfoResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="description"    column="description"    />
+        <result property="picture"    column="picture"    />
+        <result property="inputCode"    column="input_code"    />
+        <result property="keepYears"    column="keep_years"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createByName"    column="create_by_name"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateByName"    column="update_by_name"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="enabled"    column="enabled"    />
+        <result property="version"    column="version"    />
+    </resultMap>
+
+    <sql id="selectEquipmentInfoVo">
+        select id, name, description, picture, input_code, keep_years, status, create_by, create_by_name, create_time, update_by, update_by_name, update_time, enabled, version from equipment_info
+    </sql>
+
+    <select id="selectEquipmentInfoList" parameterType="EquipmentInfo" resultMap="EquipmentInfoResult">
+        <include refid="selectEquipmentInfoVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
+            <if test="picture != null  and picture != ''"> and picture = #{picture}</if>
+            <if test="inputCode != null  and inputCode != ''"> and input_code = #{inputCode}</if>
+            <if test="keepYears != null "> and keep_years = #{keepYears}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="createByName != null  and createByName != ''"> and create_by_name like concat('%', #{createByName}, '%')</if>
+            <if test="updateByName != null  and updateByName != ''"> and update_by_name like concat('%', #{updateByName}, '%')</if>
+            <if test="enabled != null "> and enabled = #{enabled}</if>
+            <if test="version != null "> and version = #{version}</if>
+        </where>
+    </select>
+    
+    <select id="selectEquipmentInfoById" parameterType="Long" resultMap="EquipmentInfoResult">
+        <include refid="selectEquipmentInfoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertEquipmentInfo" parameterType="EquipmentInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into equipment_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="description != null">description,</if>
+            <if test="picture != null">picture,</if>
+            <if test="inputCode != null">input_code,</if>
+            <if test="keepYears != null">keep_years,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createByName != null">create_by_name,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateByName != null">update_by_name,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="enabled != null">enabled,</if>
+            <if test="version != null">version,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="description != null">#{description},</if>
+            <if test="picture != null">#{picture},</if>
+            <if test="inputCode != null">#{inputCode},</if>
+            <if test="keepYears != null">#{keepYears},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createByName != null">#{createByName},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateByName != null">#{updateByName},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="enabled != null">#{enabled},</if>
+            <if test="version != null">#{version},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEquipmentInfo" parameterType="EquipmentInfo">
+        update equipment_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="picture != null">picture = #{picture},</if>
+            <if test="inputCode != null">input_code = #{inputCode},</if>
+            <if test="keepYears != null">keep_years = #{keepYears},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createByName != null">create_by_name = #{createByName},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateByName != null">update_by_name = #{updateByName},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="enabled != null">enabled = #{enabled},</if>
+            <if test="version != null">version = #{version},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteEquipmentInfoById" parameterType="Long">
+        delete from equipment_info where id = #{id}
+    </delete>
+
+    <delete id="deleteEquipmentInfoByIds" parameterType="String">
+        delete from equipment_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
