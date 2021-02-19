@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.DeviceInfoMapper">
+    
+    <resultMap type="DeviceInfo" id="DeviceInfoResult">
+        <result property="id"    column="id"    />
+        <result property="factoryId"    column="factory_id"    />
+        <result property="roomId"    column="room_id"    />
+        <result property="inputCode"    column="input_code"    />
+        <result property="name"    column="name"    />
+        <result property="description"    column="description"    />
+        <result property="picture"    column="picture"    />
+        <result property="status"    column="status"    />
+        <result property="period"    column="period"    />
+        <result property="lastCheckTime"    column="last_check_time"    />
+        <result property="nextCheckTime"    column="next_check_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createByName"    column="create_by_name"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateByName"    column="update_by_name"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="enabled"    column="enabled"    />
+        <result property="version"    column="version"    />
+    </resultMap>
+
+    <sql id="selectDeviceInfoVo">
+        select id, factory_id, room_id, input_code, name, description, picture, status, period, last_check_time, next_check_time, create_by, create_by_name, create_time, update_by, update_by_name, update_time, enabled, version from device_info
+    </sql>
+
+    <select id="selectDeviceInfoList" parameterType="DeviceInfo" resultMap="DeviceInfoResult">
+        <include refid="selectDeviceInfoVo"/>
+        <where>  
+            <if test="factoryId != null  and factoryId != ''"> and factory_id = #{factoryId}</if>
+            <if test="roomId != null  and roomId != ''"> and room_id = #{roomId}</if>
+            <if test="inputCode != null  and inputCode != ''"> and input_code = #{inputCode}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
+            <if test="picture != null  and picture != ''"> and picture = #{picture}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="period != null "> and period = #{period}</if>
+            <if test="lastCheckTime != null "> and last_check_time = #{lastCheckTime}</if>
+            <if test="nextCheckTime != null "> and next_check_time = #{nextCheckTime}</if>
+            <if test="createByName != null  and createByName != ''"> and create_by_name like concat('%', #{createByName}, '%')</if>
+            <if test="updateByName != null  and updateByName != ''"> and update_by_name like concat('%', #{updateByName}, '%')</if>
+            <if test="enabled != null "> and enabled = #{enabled}</if>
+            <if test="version != null "> and version = #{version}</if>
+        </where>
+    </select>
+    
+    <select id="selectDeviceInfoById" parameterType="Long" resultMap="DeviceInfoResult">
+        <include refid="selectDeviceInfoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertDeviceInfo" parameterType="DeviceInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into device_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="factoryId != null">factory_id,</if>
+            <if test="roomId != null">room_id,</if>
+            <if test="inputCode != null and inputCode != ''">input_code,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="description != null">description,</if>
+            <if test="picture != null">picture,</if>
+            <if test="status != null">status,</if>
+            <if test="period != null">period,</if>
+            <if test="lastCheckTime != null">last_check_time,</if>
+            <if test="nextCheckTime != null">next_check_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createByName != null and createByName != ''">create_by_name,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateByName != null and updateByName != ''">update_by_name,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="enabled != null">enabled,</if>
+            <if test="version != null">version,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="factoryId != null">#{factoryId},</if>
+            <if test="roomId != null">#{roomId},</if>
+            <if test="inputCode != null and inputCode != ''">#{inputCode},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="description != null">#{description},</if>
+            <if test="picture != null">#{picture},</if>
+            <if test="status != null">#{status},</if>
+            <if test="period != null">#{period},</if>
+            <if test="lastCheckTime != null">#{lastCheckTime},</if>
+            <if test="nextCheckTime != null">#{nextCheckTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createByName != null and createByName != ''">#{createByName},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateByName != null and updateByName != ''">#{updateByName},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="enabled != null">#{enabled},</if>
+            <if test="version != null">#{version},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDeviceInfo" parameterType="DeviceInfo">
+        update device_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="factoryId != null">factory_id = #{factoryId},</if>
+            <if test="roomId != null">room_id = #{roomId},</if>
+            <if test="inputCode != null and inputCode != ''">input_code = #{inputCode},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="picture != null">picture = #{picture},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="period != null">period = #{period},</if>
+            <if test="lastCheckTime != null">last_check_time = #{lastCheckTime},</if>
+            <if test="nextCheckTime != null">next_check_time = #{nextCheckTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createByName != null and createByName != ''">create_by_name = #{createByName},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateByName != null and updateByName != ''">update_by_name = #{updateByName},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="enabled != null">enabled = #{enabled},</if>
+            <if test="version != null">version = #{version},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDeviceInfoById" parameterType="Long">
+        delete from device_info where id = #{id}
+    </delete>
+
+    <delete id="deleteDeviceInfoByIds" parameterType="String">
+        delete from device_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
