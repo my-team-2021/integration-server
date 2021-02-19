@@ -3,6 +3,12 @@ package com.ruoyi.system.controller;
 import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
+
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.extra.qrcode.QrCodeUtil;
+import cn.hutool.extra.qrcode.QrConfig;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -107,12 +113,56 @@ public class EquipmentInfoController extends BaseController
      * 导出设备二维码信息
      */
 //    @PreAuthorize(hasPermi = "system:equpiment:qrCodeExport")
-    @Log(title = "导出设备二维码信息", businessType = BusinessType.EXPORT)
-    @PostMapping("/qrCodeExport")
-    public void qrCodeExport(HttpServletResponse response, EquipmentInfo equipmentInfo) throws IOException
+//    @Log(title = "导出设备二维码信息", businessType = BusinessType.EXPORT)
+//    @PostMapping("/qrCodeExport")
+//    public void qrCodeExport(HttpServletResponse response, EquipmentInfo equipmentInfo) throws IOException
+//    {
+//        String json = JSONUtil.toJsonStr(equipmentInfo);
+////        List<EquipmentInfo> list = equipmentInfoService.selectEquipmentInfoList(equipmentInfo);
+////        ExcelUtil<EquipmentInfo> util = new ExcelUtil<EquipmentInfo>(EquipmentInfo.class);
+////        util.exportExcel(response, list, "equpiment");
+//
+//        // 生成指定url对应的二维码到文件，宽和高都是300像素
+//        QrCodeUtil.generate(json, 300, 300, FileUtil.file("d:/qrcode.jpg"));
+//
+//        // 识别二维码
+//        // decode -> "http://hutool.cn/"
+//        String decode = QrCodeUtil.decode(FileUtil.file("d:/qrcode.jpg"));
+//        System.out.println("decode:" + decode);
+//
+//        //base64
+//        QrConfig config = new QrConfig(300, 300);
+//        // 设置边距，既二维码和背景之间的边距
+//        config.setMargin(3);
+//        String generateAsBase64 = QrCodeUtil.generateAsBase64(json, config, "png");
+//        System.out.println("generateAsBase64:" + generateAsBase64);
+//    }
+
+    /**
+     * 获取设备信息详细信息
+     */
+//    @PreAuthorize(hasPermi = "system:equpiment:query")
+    @GetMapping(value = "/qrCodeExport/{id}")
+    public AjaxResult qrCodeExport(@PathVariable("id") Long id)
     {
-        List<EquipmentInfo> list = equipmentInfoService.selectEquipmentInfoList(equipmentInfo);
-        ExcelUtil<EquipmentInfo> util = new ExcelUtil<EquipmentInfo>(EquipmentInfo.class);
-        util.exportExcel(response, list, "equpiment");
+        EquipmentInfo equipmentInfo = equipmentInfoService.selectEquipmentInfoById(id);
+        String json = JSONUtil.toJsonStr(equipmentInfo);
+
+        // 生成指定url对应的二维码到文件，宽和高都是300像素
+        QrCodeUtil.generate(json, 300, 300, FileUtil.file("d:/qrcode.jpg"));
+
+        // 识别二维码
+        // decode -> "http://hutool.cn/"
+        String decode = QrCodeUtil.decode(FileUtil.file("d:/qrcode.jpg"));
+        System.out.println("decode:" + decode);
+
+        //base64
+        QrConfig config = new QrConfig(300, 300);
+        // 设置边距，既二维码和背景之间的边距
+        config.setMargin(3);
+        String generateAsBase64 = QrCodeUtil.generateAsBase64(json, config, "png");
+        System.out.println("generateAsBase64:" + generateAsBase64);
+        equipmentInfo.setPicture(generateAsBase64);
+        return AjaxResult.success(equipmentInfo);
     }
 }

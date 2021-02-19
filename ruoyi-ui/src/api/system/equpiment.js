@@ -17,6 +17,14 @@ export function getEqupiment(id) {
   })
 }
 
+// 查询设备二维码信息
+export function getEqupimentQrCode(id) {
+  return request({
+    url: '/system/equpiment/qrCodeExport/' + id,
+    method: 'get'
+  })
+}
+
 // 新增设备信息
 export function addEqupiment(data) {
   return request({
