@@ -28,16 +28,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="CheckItemDetail" id="CheckItemDetailResult">
         <result property="id"    column="id"    />
-        <result property="factoryId"    column="factory_id"    />
-        <result property="roomId"    column="room_id"    />
-        <result property="inputCode"    column="input_code"    />
-        <result property="type"    column="type"    />
+        <result property="parentId"    column="parent_id"    />
         <result property="selecteds"    column="selecteds"    />
         <result property="fontRemark"    column="font_remark"    />
         <result property="imgRemarks"    column="img_remarks"    />
         <result property="videoRemark"    column="video_remark"    />
-        <result property="checkUser"    column="check_user"    />
-        <result property="checkTime"    column="check_time"    />
         <result property="version"    column="version"    />
         <result property="createBy"    column="create_by"    />
         <result property="createByName"    column="create_by_name"    />
@@ -70,9 +65,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="selectCheckLogById" parameterType="Long" resultMap="CheckLogCheckItemDetailResult">
         select a.id, a.factory_id, a.room_id, a.input_code, a.type, a.check_user, a.check_time, a.version, a.create_by, a.create_by_name, a.create_time, a.update_by, a.update_by_name, a.update_time, a.enabled,
-            b.id, b.factory_id, b.room_id, b.input_code, b.type, b.selecteds, b.font_remark, b.img_remarks, b.video_remark, b.check_user, b.check_time, b.version, b.create_by, b.create_by_name, b.create_time, b.update_by, b.update_by_name, b.update_time, b.enabled
+            b.id, b.parent_id, b.selecteds, b.font_remark, b.img_remarks, b.video_remark, b.version, b.create_by, b.create_by_name, b.create_time, b.update_by, b.update_by_name, b.update_time, b.enabled
         from check_log a
-        left join check_item_detail b on b.version = a.id
+        left join check_item_detail b on b.parent_id = a.id
         where a.id = #{id}
     </select>
         
@@ -144,21 +139,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
     
-    <delete id="deleteCheckItemDetailByVersions" parameterType="String">
-        delete from check_item_detail where version in 
-        <foreach item="version" collection="array" open="(" separator="," close=")">
-            #{version}
+    <delete id="deleteCheckItemDetailByParentIds" parameterType="String">
+        delete from check_item_detail where parent_id in 
+        <foreach item="parentId" collection="array" open="(" separator="," close=")">
+            #{parentId}
         </foreach>
     </delete>
 
-    <delete id="deleteCheckItemDetailByVersion" parameterType="Long">
-        delete from check_item_detail where version = #{version}
+    <delete id="deleteCheckItemDetailByParentId" parameterType="Long">
+        delete from check_item_detail where parent_id = #{parentId}
     </delete>
 
     <insert id="batchCheckItemDetail">
-        insert into check_item_detail( id, factory_id, room_id, input_code, type, selecteds, font_remark, img_remarks, video_remark, check_user, check_time, version, create_by, create_by_name, create_time, update_by, update_by_name, update_time, enabled) values
+        insert into check_item_detail( id, parent_id, selecteds, font_remark, img_remarks, video_remark, version, create_by, create_by_name, create_time, update_by, update_by_name, update_time, enabled) values
 		<foreach item="item" index="index" collection="list" separator=",">
-            ( #{item.id}, #{item.factoryId}, #{item.roomId}, #{item.inputCode}, #{item.type}, #{item.selecteds}, #{item.fontRemark}, #{item.imgRemarks}, #{item.videoRemark}, #{item.checkUser}, #{item.checkTime}, #{item.version}, #{item.createBy}, #{item.createByName}, #{item.createTime}, #{item.updateBy}, #{item.updateByName}, #{item.updateTime}, #{item.enabled})
+            ( #{item.id}, #{item.parentId}, #{item.selecteds}, #{item.fontRemark}, #{item.imgRemarks}, #{item.videoRemark}, #{item.version}, #{item.createBy}, #{item.createByName}, #{item.createTime}, #{item.updateBy}, #{item.updateByName}, #{item.updateTime}, #{item.enabled})
         </foreach>
     </insert>
 </mapper>

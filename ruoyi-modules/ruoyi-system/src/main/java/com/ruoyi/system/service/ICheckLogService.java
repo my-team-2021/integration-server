@@ -1,15 +1,13 @@
 package com.ruoyi.system.service;
 
-
-import com.ruoyi.system.domain.CheckLog;
-
 import java.util.List;
+import com.ruoyi.system.domain.CheckLog;
 
 /**
  * 检修操作记录Service接口
  * 
  * @author zengjl
- * @date 2021-02-19
+ * @date 2021-02-20
  */
 public interface ICheckLogService 
 {

@@ -1,8 +1,7 @@
 package com.ruoyi.system.domain;
 
-import java.util.Date;
 import java.util.List;
-
+import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -13,7 +12,7 @@ import com.ruoyi.common.core.web.domain.BaseEntity;
  * 检修操作记录对象 check_log
  * 
  * @author zengjl
- * @date 2021-02-19
+ * @date 2021-02-20
  */
 public class CheckLog extends BaseEntity
 {

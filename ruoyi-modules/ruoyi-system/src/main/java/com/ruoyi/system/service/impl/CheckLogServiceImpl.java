@@ -1,27 +1,25 @@
 package com.ruoyi.system.service.impl;
 
+import java.util.List;
 import com.ruoyi.common.core.utils.DateUtils;
-import com.ruoyi.common.core.utils.StringUtils;
-import com.ruoyi.system.domain.CheckItemDetail;
-import com.ruoyi.system.domain.CheckLog;
-import com.ruoyi.system.mapper.CheckLogMapper;
-import com.ruoyi.system.service.ICheckLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
-import java.util.List;
-
+import com.ruoyi.common.core.utils.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
+import com.ruoyi.system.domain.CheckItemDetail;
+import com.ruoyi.system.mapper.CheckLogMapper;
+import com.ruoyi.system.domain.CheckLog;
+import com.ruoyi.system.service.ICheckLogService;
 
 /**
  * 检修操作记录Service业务层处理
  * 
  * @author zengjl
- * @date 2021-02-19
+ * @date 2021-02-20
  */
 @Service
-public class CheckLogServiceImpl implements ICheckLogService
+public class CheckLogServiceImpl implements ICheckLogService 
 {
     @Autowired
     private CheckLogMapper checkLogMapper;
@@ -77,7 +75,7 @@ public class CheckLogServiceImpl implements ICheckLogService
     public int updateCheckLog(CheckLog checkLog)
     {
         checkLog.setUpdateTime(DateUtils.getNowDate());
-        checkLogMapper.deleteCheckItemDetailByVersion(checkLog.getId());
+        checkLogMapper.deleteCheckItemDetailByParentId(checkLog.getId());
         insertCheckItemDetail(checkLog);
         return checkLogMapper.updateCheckLog(checkLog);
     }
@@ -92,7 +90,7 @@ public class CheckLogServiceImpl implements ICheckLogService
     @Override
     public int deleteCheckLogByIds(Long[] ids)
     {
-        checkLogMapper.deleteCheckItemDetailByVersions(ids);
+        checkLogMapper.deleteCheckItemDetailByParentIds(ids);
         return checkLogMapper.deleteCheckLogByIds(ids);
     }
 
@@ -105,7 +103,7 @@ public class CheckLogServiceImpl implements ICheckLogService
     @Override
     public int deleteCheckLogById(Long id)
     {
-        checkLogMapper.deleteCheckItemDetailByVersion(id);
+        checkLogMapper.deleteCheckItemDetailByParentId(id);
         return checkLogMapper.deleteCheckLogById(id);
     }
 
@@ -123,7 +121,7 @@ public class CheckLogServiceImpl implements ICheckLogService
             List<CheckItemDetail> list = new ArrayList<CheckItemDetail>();
             for (CheckItemDetail checkItemDetail : checkItemDetailList)
             {
-                checkItemDetail.setVersion(id);
+                checkItemDetail.setParentId(id);
                 list.add(checkItemDetail);
             }
             if (list.size() > 0)
