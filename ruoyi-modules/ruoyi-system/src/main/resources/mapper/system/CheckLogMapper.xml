@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CheckLogMapper">
+    
+    <resultMap type="CheckLog" id="CheckLogResult">
+        <result property="id"    column="id"    />
+        <result property="factoryId"    column="factory_id"    />
+        <result property="roomId"    column="room_id"    />
+        <result property="inputCode"    column="input_code"    />
+        <result property="type"    column="type"    />
+        <result property="checkUser"    column="check_user"    />
+        <result property="checkTime"    column="check_time"    />
+        <result property="version"    column="version"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createByName"    column="create_by_name"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateByName"    column="update_by_name"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="enabled"    column="enabled"    />
+    </resultMap>
+
+    <resultMap id="CheckLogCheckItemDetailResult" type="CheckLog" extends="CheckLogResult">
+        <collection property="checkItemDetailList" notNullColumn="id" javaType="java.util.List" resultMap="CheckItemDetailResult" />
+    </resultMap>
+
+    <resultMap type="CheckItemDetail" id="CheckItemDetailResult">
+        <result property="id"    column="id"    />
+        <result property="factoryId"    column="factory_id"    />
+        <result property="roomId"    column="room_id"    />
+        <result property="inputCode"    column="input_code"    />
+        <result property="type"    column="type"    />
+        <result property="selecteds"    column="selecteds"    />
+        <result property="fontRemark"    column="font_remark"    />
+        <result property="imgRemarks"    column="img_remarks"    />
+        <result property="videoRemark"    column="video_remark"    />
+        <result property="checkUser"    column="check_user"    />
+        <result property="checkTime"    column="check_time"    />
+        <result property="version"    column="version"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createByName"    column="create_by_name"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateByName"    column="update_by_name"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="enabled"    column="enabled"    />
+    </resultMap>
+
+    <sql id="selectCheckLogVo">
+        select id, factory_id, room_id, input_code, type, check_user, check_time, version, create_by, create_by_name, create_time, update_by, update_by_name, update_time, enabled from check_log
+    </sql>
+
+    <select id="selectCheckLogList" parameterType="CheckLog" resultMap="CheckLogResult">
+        <include refid="selectCheckLogVo"/>
+        <where>  
+            <if test="factoryId != null  and factoryId != ''"> and factory_id = #{factoryId}</if>
+            <if test="roomId != null  and roomId != ''"> and room_id = #{roomId}</if>
+            <if test="inputCode != null  and inputCode != ''"> and input_code = #{inputCode}</if>
+            <if test="type != null "> and type = #{type}</if>
+            <if test="checkUser != null  and checkUser != ''"> and check_user = #{checkUser}</if>
+            <if test="checkTime != null "> and check_time = #{checkTime}</if>
+            <if test="version != null  and version != ''"> and version = #{version}</if>
+            <if test="createByName != null  and createByName != ''"> and create_by_name like concat('%', #{createByName}, '%')</if>
+            <if test="updateByName != null  and updateByName != ''"> and update_by_name like concat('%', #{updateByName}, '%')</if>
+            <if test="enabled != null "> and enabled = #{enabled}</if>
+        </where>
+    </select>
+    
+    <select id="selectCheckLogById" parameterType="Long" resultMap="CheckLogCheckItemDetailResult">
+        select a.id, a.factory_id, a.room_id, a.input_code, a.type, a.check_user, a.check_time, a.version, a.create_by, a.create_by_name, a.create_time, a.update_by, a.update_by_name, a.update_time, a.enabled,
+            b.id, b.factory_id, b.room_id, b.input_code, b.type, b.selecteds, b.font_remark, b.img_remarks, b.video_remark, b.check_user, b.check_time, b.version, b.create_by, b.create_by_name, b.create_time, b.update_by, b.update_by_name, b.update_time, b.enabled
+        from check_log a
+        left join check_item_detail b on b.version = a.id
+        where a.id = #{id}
+    </select>
+        
+    <insert id="insertCheckLog" parameterType="CheckLog" useGeneratedKeys="true" keyProperty="id">
+        insert into check_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="factoryId != null">factory_id,</if>
+            <if test="roomId != null">room_id,</if>
+            <if test="inputCode != null and inputCode != ''">input_code,</if>
+            <if test="type != null">type,</if>
+            <if test="checkUser != null and checkUser != ''">check_user,</if>
+            <if test="checkTime != null">check_time,</if>
+            <if test="version != null and version != ''">version,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createByName != null and createByName != ''">create_by_name,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateByName != null and updateByName != ''">update_by_name,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="enabled != null">enabled,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="factoryId != null">#{factoryId},</if>
+            <if test="roomId != null">#{roomId},</if>
+            <if test="inputCode != null and inputCode != ''">#{inputCode},</if>
+            <if test="type != null">#{type},</if>
+            <if test="checkUser != null and checkUser != ''">#{checkUser},</if>
+            <if test="checkTime != null">#{checkTime},</if>
+            <if test="version != null and version != ''">#{version},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createByName != null and createByName != ''">#{createByName},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateByName != null and updateByName != ''">#{updateByName},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="enabled != null">#{enabled},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCheckLog" parameterType="CheckLog">
+        update check_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="factoryId != null">factory_id = #{factoryId},</if>
+            <if test="roomId != null">room_id = #{roomId},</if>
+            <if test="inputCode != null and inputCode != ''">input_code = #{inputCode},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="checkUser != null and checkUser != ''">check_user = #{checkUser},</if>
+            <if test="checkTime != null">check_time = #{checkTime},</if>
+            <if test="version != null and version != ''">version = #{version},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createByName != null and createByName != ''">create_by_name = #{createByName},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateByName != null and updateByName != ''">update_by_name = #{updateByName},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="enabled != null">enabled = #{enabled},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCheckLogById" parameterType="Long">
+        delete from check_log where id = #{id}
+    </delete>
+
+    <delete id="deleteCheckLogByIds" parameterType="String">
+        delete from check_log where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <delete id="deleteCheckItemDetailByVersions" parameterType="String">
+        delete from check_item_detail where version in 
+        <foreach item="version" collection="array" open="(" separator="," close=")">
+            #{version}
+        </foreach>
+    </delete>
+
+    <delete id="deleteCheckItemDetailByVersion" parameterType="Long">
+        delete from check_item_detail where version = #{version}
+    </delete>
+
+    <insert id="batchCheckItemDetail">
+        insert into check_item_detail( id, factory_id, room_id, input_code, type, selecteds, font_remark, img_remarks, video_remark, check_user, check_time, version, create_by, create_by_name, create_time, update_by, update_by_name, update_time, enabled) values
+		<foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.id}, #{item.factoryId}, #{item.roomId}, #{item.inputCode}, #{item.type}, #{item.selecteds}, #{item.fontRemark}, #{item.imgRemarks}, #{item.videoRemark}, #{item.checkUser}, #{item.checkTime}, #{item.version}, #{item.createBy}, #{item.createByName}, #{item.createTime}, #{item.updateBy}, #{item.updateByName}, #{item.updateTime}, #{item.enabled})
+        </foreach>
+    </insert>
+</mapper>
