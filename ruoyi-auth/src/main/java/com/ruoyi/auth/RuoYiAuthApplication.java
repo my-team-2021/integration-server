@@ -1,5 +1,6 @@
 package com.ruoyi.auth;
 
+import com.ruoyi.common.swagger.annotation.EnableCustomSwagger2;
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
 import com.ruoyi.common.security.annotation.EnableRyFeignClients;
@@ -9,6 +10,7 @@ import com.ruoyi.common.security.annotation.EnableRyFeignClients;
  * 
  * @author ruoyi
  */
+@EnableCustomSwagger2
 @EnableRyFeignClients
 @SpringCloudApplication
 public class RuoYiAuthApplication
