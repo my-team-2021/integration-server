@@ -129,9 +129,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteDeviceInfoByIds" parameterType="String">
-        delete from device_info where id in 
+        delete from device_info where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
+
+    <select id="selectValidDevicesByUserId" resultMap="DeviceInfoResult">
+        <include refid="selectDeviceInfoVo"/>
+        where status = 1 and id in (
+            select equipment_id from check_user_equipment_rel
+            where enabled = 1 and user_id = #{userId}
+        )
+    </select>
 </mapper>

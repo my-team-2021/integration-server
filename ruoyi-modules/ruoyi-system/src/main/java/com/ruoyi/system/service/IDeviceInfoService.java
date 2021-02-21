@@ -59,4 +59,12 @@ public interface IDeviceInfoService
      * @return 结果
      */
     public int deleteDeviceInfoById(Long id);
+
+    /**
+     * 查询某检修人员所属的检修设备信息
+     *
+     * @param userId 用户ID
+     * @return 检修操作记录集合
+     */
+    public List<DeviceInfo> selectCheckEquipsOfUser(String userId);
 }

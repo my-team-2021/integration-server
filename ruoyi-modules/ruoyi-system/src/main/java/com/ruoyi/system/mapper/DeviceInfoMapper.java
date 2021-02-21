@@ -60,4 +60,12 @@ public interface DeviceInfoMapper
      * @return 结果
      */
     public int deleteDeviceInfoByIds(Long[] ids);
+
+    /**
+     * 查询某检修人员所属的检修设备信息
+     *
+     * @param userId 用户id
+     * @return 设备信息维护集合
+     */
+    public List<DeviceInfo> selectValidDevicesByUserId(String userId);
 }

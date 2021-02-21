@@ -93,4 +93,15 @@ public class DeviceInfoServiceImpl implements IDeviceInfoService
     {
         return deviceInfoMapper.deleteDeviceInfoById(id);
     }
+
+    /**
+     * 查询检修人员所属的设备信息
+     *
+     * @param userId 用户ID
+     * @return 设备信息维护
+     */
+    @Override
+    public List<DeviceInfo> selectCheckEquipsOfUser(String userId) {
+        return deviceInfoMapper.selectValidDevicesByUserId(userId);
+    }
 }
