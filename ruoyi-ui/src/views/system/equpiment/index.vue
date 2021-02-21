@@ -208,7 +208,7 @@
 
     <!-- 查看设备二维码信息对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="qrCodeInfo" :model="qrCodeInfo" label-width="80px">
+      <el-form ref="qrCodeInfo" :model="qrCodeInfo" label-width="80px" :disabled="true">
         <el-form-item label="设备名称" prop="name">
           <el-input v-model="qrCodeInfo.name" placeholder="请输入设备名称" />
         </el-form-item>

@@ -59,7 +59,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -114,7 +113,6 @@
 
     <el-table v-loading="loading" :data="checkLogList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="主键" align="center" prop="id" />
       <el-table-column label="厂房名称" align="center" prop="factoryId" />
       <el-table-column label="房间编号" align="center" prop="roomId" />
       <el-table-column label="设备编号" align="center" prop="inputCode" />
@@ -128,14 +126,13 @@
       <el-table-column label="检修版本" align="center" prop="version" />
       <el-table-column label="创建人名称" align="center" prop="createByName" />
       <el-table-column label="最后修改人名称" align="center" prop="updateByName" />
-      <el-table-column label="逻辑删除标记" align="center" prop="enabled" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
            <el-button
              size="mini"
              type="text"
              icon="el-icon-edit"
-             @click="handleUpdate(scope.row)"
+             @click="handleLogInfo(scope.row)"
              v-hasPermi="['system:checkLog:edit']"
            >详情</el-button>
           <el-button
@@ -165,45 +162,70 @@
     />
 
     <!-- 添加或修改检修操作记录对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="厂房名称" prop="factoryId">
-          <el-input v-model="form.factoryId" placeholder="请输入厂房名称" />
-        </el-form-item>
-        <el-form-item label="房间编号" prop="roomId">
-          <el-input v-model="form.roomId" placeholder="请输入房间编号" />
-        </el-form-item>
-        <el-form-item label="设备编号" prop="inputCode">
-          <el-input v-model="form.inputCode" placeholder="请输入设备编号" />
-        </el-form-item>
-        <el-form-item label="设备类型" prop="type">
-          <el-select v-model="form.type" placeholder="请选择设备类型">
-            <el-option label="请选择字典生成" value="" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="检查人姓名" prop="checkUser">
-          <el-input v-model="form.checkUser" placeholder="请输入检查人姓名" />
-        </el-form-item>
-        <el-form-item label="检查时间" prop="checkTime">
-          <el-date-picker clearable size="small"
-            v-model="form.checkTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择检查时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="检修版本" prop="version">
-          <el-input v-model="form.version" placeholder="请输入检修版本" />
-        </el-form-item>
-        <el-form-item label="创建人名称" prop="createByName">
-          <el-input v-model="form.createByName" placeholder="请输入创建人名称" />
-        </el-form-item>
-        <el-form-item label="最后修改人名称" prop="updateByName">
-          <el-input v-model="form.updateByName" placeholder="请输入最后修改人名称" />
-        </el-form-item>
-        <el-form-item label="逻辑删除标记" prop="enabled">
-          <el-input v-model="form.enabled" placeholder="请输入逻辑删除标记" />
-        </el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="厂房名称" prop="factoryId">
+              <el-input v-model="form.factoryId" placeholder="请输入厂房名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="房间编号" prop="roomId">
+              <el-input v-model="form.roomId" placeholder="请输入房间编号" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="设备编号" prop="inputCode">
+              <el-input v-model="form.inputCode" placeholder="请输入设备编号" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="设备类型" prop="type">
+              <el-select v-model="form.type" placeholder="请选择设备类型">
+                <el-option label="请选择字典生成" value="" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="检查人姓名" prop="checkUser">
+              <el-input v-model="form.checkUser" placeholder="请输入检查人姓名" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="检查时间" prop="checkTime">
+              <el-date-picker clearable size="small"
+                              v-model="form.checkTime"
+                              type="date"
+                              value-format="yyyy-MM-dd"
+                              placeholder="选择检查时间">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="检修版本" prop="version">
+              <el-input v-model="form.version" placeholder="请输入检修版本" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="创建人名称" prop="createByName">
+              <el-input v-model="form.createByName" placeholder="请输入创建人名称" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="最后修改人名称" prop="updateByName">
+              <el-input v-model="form.updateByName" placeholder="请输入最后修改人名称" />
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-divider content-position="center">检修项详情信息</el-divider>
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
@@ -246,17 +268,114 @@
               <el-input v-model="scope.row.updateByName" placeholder="请输入最后修改人名称" />
             </template>
           </el-table-column>
-          <el-table-column label="逻辑删除标记" prop="enabled">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.enabled" placeholder="请输入逻辑删除标记" />
-            </template>
-          </el-table-column>
         </el-table>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
+    </el-dialog>
+    <!-- 检修操作记录详情信息 -->
+    <el-dialog :title="logTitle" :visible.sync="logOpen" width="1000px" append-to-body>
+      <el-form ref="logForm" :model="logForm" label-width="80px"  :disabled="true">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="厂房名称" prop="factoryId">
+              <el-input v-model="logForm.factoryId" placeholder="请输入厂房名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="房间编号" prop="roomId">
+              <el-input v-model="logForm.roomId" placeholder="请输入房间编号" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="设备编号" prop="inputCode">
+              <el-input v-model="logForm.inputCode" placeholder="请输入设备编号" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="设备类型" prop="type">
+              <el-select v-model="logForm.type" placeholder="请选择设备类型">
+                <el-option label="请选择字典生成" value="" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="检查人姓名" prop="checkUser">
+              <el-input v-model="logForm.checkUser" placeholder="请输入检查人姓名" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="检查时间" prop="checkTime">
+              <el-date-picker clearable size="small"
+                              v-model="logForm.checkTime"
+                              type="date"
+                              value-format="yyyy-MM-dd"
+                              placeholder="选择检查时间">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="检修版本" prop="version">
+              <el-input v-model="logForm.version" placeholder="请输入检修版本" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="创建人名称" prop="createByName">
+              <el-input v-model="logForm.createByName" placeholder="请输入创建人名称" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="最后修改人名称" prop="updateByName">
+              <el-input v-model="logForm.updateByName" placeholder="请输入最后修改人名称" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-divider content-position="center">检修项详情信息</el-divider>
+        <el-table :data="checkItemDetailList" :row-class-name="rowCheckItemDetailIndex" @selection-change="handleCheckItemDetailSelectionChange" ref="checkItemDetail">
+          <el-table-column type="selection" width="50" align="center" />
+          <el-table-column label="序号" align="center" prop="index" width="50"/>
+          <el-table-column label="选中的选中集合，以逗号隔开" prop="selecteds">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.selecteds" placeholder="请输入选中的选中集合，以逗号隔开" />
+            </template>
+          </el-table-column>
+          <el-table-column label="文字备注" prop="fontRemark">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.fontRemark" placeholder="请输入文字备注" />
+            </template>
+          </el-table-column>
+          <el-table-column label="图片备注" prop="imgRemarks">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.imgRemarks" placeholder="请输入图片备注" />
+            </template>
+          </el-table-column>
+          <el-table-column label="视频备注，一个检查项只能一个视频" prop="videoRemark">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.videoRemark" placeholder="请输入视频备注，一个检查项只能一个视频" />
+            </template>
+          </el-table-column>
+          <el-table-column label="创建人名称" prop="createByName">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.createByName" placeholder="请输入创建人名称" />
+            </template>
+          </el-table-column>
+          <el-table-column label="最后修改人名称" prop="updateByName">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.updateByName" placeholder="请输入最后修改人名称" />
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-form>
     </el-dialog>
   </div>
 </template>
@@ -290,8 +409,12 @@ export default {
       checkItemDetailList: [],
       // 弹出层标题
       title: "",
+      // 弹出层标题
+      logTitle: "",
       // 是否显示弹出层
       open: false,
+      // 是否显示弹出层
+      logOpen: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -309,6 +432,8 @@ export default {
       },
       // 表单参数
       form: {},
+      // 表单参数
+      logForm: {},
       // 表单校验
       rules: {
         inputCode: [
@@ -397,6 +522,10 @@ export default {
       this.resetForm("queryForm");
       this.handleQuery();
     },
+
+
+
+
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
@@ -418,6 +547,17 @@ export default {
         this.checkItemDetailList = response.data.checkItemDetailList;
         this.open = true;
         this.title = "修改检修操作记录";
+      });
+    },
+    /** 详情按钮操作 */
+    handleLogInfo(row) {
+      this.reset();
+      const id = row.id || this.ids
+      getCheckLog(id).then(response => {
+        this.logForm = response.data;
+        this.checkItemDetailList = response.data.checkItemDetailList;
+        this.logOpen = true;
+        this.logTitle = "检修记录详情";
       });
     },
     /** 提交按钮 */

@@ -52,7 +52,7 @@ public class ValidateCodeFilter extends AbstractGatewayFilterFactory<Object>
             {
                 String rspStr = resolveBodyFromRequest(request);
                 JSONObject obj = JSONObject.parseObject(rspStr);
-                validateCodeService.checkCapcha(obj.getString(CODE), obj.getString(UUID));
+//                validateCodeService.checkCapcha(obj.getString(CODE), obj.getString(UUID));
             }
             catch (Exception e)
             {

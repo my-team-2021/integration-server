@@ -140,7 +140,7 @@
 
     <el-table v-loading="loading" :data="logList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="主键" align="center" prop="id" />
+<!--      <el-table-column label="主键" align="center" prop="id" />-->
       <el-table-column label="厂房名称" align="center" prop="factoryId" />
       <el-table-column label="房间编号" align="center" prop="roomId" />
       <el-table-column label="设备编号" align="center" prop="inputCode" />
@@ -152,9 +152,9 @@
         </template>
       </el-table-column>
       <el-table-column label="检修版本" align="center" prop="version" />
-      <el-table-column label="创建人名称" align="center" prop="createByName" />
-      <el-table-column label="最后修改人名称" align="center" prop="updateByName" />
-      <el-table-column label="逻辑删除标记" align="center" prop="enabled" />
+<!--      <el-table-column label="创建人名称" align="center" prop="createByName" />-->
+<!--      <el-table-column label="最后修改人名称" align="center" prop="updateByName" />-->
+<!--      <el-table-column label="逻辑删除标记" align="center" prop="enabled" />-->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -174,7 +174,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -214,15 +214,15 @@
         <el-form-item label="检修版本" prop="version">
           <el-input v-model="form.version" placeholder="请输入检修版本" />
         </el-form-item>
-        <el-form-item label="创建人名称" prop="createByName">
-          <el-input v-model="form.createByName" placeholder="请输入创建人名称" />
-        </el-form-item>
-        <el-form-item label="最后修改人名称" prop="updateByName">
-          <el-input v-model="form.updateByName" placeholder="请输入最后修改人名称" />
-        </el-form-item>
-        <el-form-item label="逻辑删除标记" prop="enabled">
-          <el-input v-model="form.enabled" placeholder="请输入逻辑删除标记" />
-        </el-form-item>
+<!--        <el-form-item label="创建人名称" prop="createByName">-->
+<!--          <el-input v-model="form.createByName" placeholder="请输入创建人名称" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="最后修改人名称" prop="updateByName">-->
+<!--          <el-input v-model="form.updateByName" placeholder="请输入最后修改人名称" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="逻辑删除标记" prop="enabled">-->
+<!--          <el-input v-model="form.enabled" placeholder="请输入逻辑删除标记" />-->
+<!--        </el-form-item>-->
         <el-divider content-position="center">检修项详情信息</el-divider>
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
@@ -285,21 +285,21 @@
               <el-input v-model="scope.row.checkTime" placeholder="请输入检查时间" />
             </template>
           </el-table-column>
-          <el-table-column label="创建人名称" prop="createByName">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.createByName" placeholder="请输入创建人名称" />
-            </template>
-          </el-table-column>
-          <el-table-column label="最后修改人名称" prop="updateByName">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.updateByName" placeholder="请输入最后修改人名称" />
-            </template>
-          </el-table-column>
-          <el-table-column label="逻辑删除标记" prop="enabled">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.enabled" placeholder="请输入逻辑删除标记" />
-            </template>
-          </el-table-column>
+<!--          <el-table-column label="创建人名称" prop="createByName">-->
+<!--            <template slot-scope="scope">-->
+<!--              <el-input v-model="scope.row.createByName" placeholder="请输入创建人名称" />-->
+<!--            </template>-->
+<!--          </el-table-column>-->
+<!--          <el-table-column label="最后修改人名称" prop="updateByName">-->
+<!--            <template slot-scope="scope">-->
+<!--              <el-input v-model="scope.row.updateByName" placeholder="请输入最后修改人名称" />-->
+<!--            </template>-->
+<!--          </el-table-column>-->
+<!--          <el-table-column label="逻辑删除标记" prop="enabled">-->
+<!--            <template slot-scope="scope">-->
+<!--              <el-input v-model="scope.row.enabled" placeholder="请输入逻辑删除标记" />-->
+<!--            </template>-->
+<!--          </el-table-column>-->
         </el-table>
       </el-form>
       <div slot="footer" class="dialog-footer">
