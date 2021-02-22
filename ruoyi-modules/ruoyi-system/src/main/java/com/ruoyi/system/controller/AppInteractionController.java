@@ -62,7 +62,7 @@ public class AppInteractionController extends BaseController {
      * 检修视频、图片上传
      */
     @PreAuthorize(hasPermi = "system:appInteraction:upload")
-    @GetMapping("/upload")
+    @PostMapping("/upload")
     public AjaxResult upload(@RequestParam("uploadFiles") MultipartFile[] files) {
         if (files.length > 0) {
             for (MultipartFile file : files) {
@@ -79,7 +79,7 @@ public class AppInteractionController extends BaseController {
      * 检修表单提交
      */
     @PreAuthorize(hasPermi = "system:appInteraction:commitCheckInfo")
-    @GetMapping("/commitCheckInfo")
+    @PostMapping("/commitCheckInfo")
     public AjaxResult commitCheckInfo(@RequestBody JSONObject request) {
         LoginUser loginUser = tokenService.getLoginUser();
         String username = loginUser.getUsername();
