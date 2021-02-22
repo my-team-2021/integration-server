@@ -33,8 +33,6 @@ public class DeviceInfoController extends BaseController
 {
     @Autowired
     private IDeviceInfoService deviceInfoService;
-    @Autowired
-    private TokenService tokenService;
 
     /**
      * 查询设备信息维护列表
@@ -46,19 +44,6 @@ public class DeviceInfoController extends BaseController
         deviceInfo.setStatus(1);
         startPage();
         List<DeviceInfo> list = deviceInfoService.selectDeviceInfoList(deviceInfo);
-        return getDataTable(list);
-    }
-
-    /**
-     * 预警信息列表
-     */
-    @PreAuthorize(hasPermi = "system:device:validList")
-    @GetMapping("/validList")
-    public TableDataInfo validList()
-    {
-        LoginUser loginUser = tokenService.getLoginUser();
-        startPage();
-        List<DeviceInfo> list = deviceInfoService.selectCheckEquipsOfUser(loginUser.getUserid());
         return getDataTable(list);
     }
 
