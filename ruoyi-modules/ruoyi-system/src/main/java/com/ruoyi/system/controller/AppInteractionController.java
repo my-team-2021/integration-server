@@ -15,6 +15,7 @@ import com.ruoyi.system.api.model.LoginUser;
 import com.ruoyi.system.domain.CheckItemDetail;
 import com.ruoyi.system.domain.CheckLog;
 import com.ruoyi.system.domain.DeviceInfo;
+import com.ruoyi.system.service.ICheckItemDetailService;
 import com.ruoyi.system.service.ICheckLogService;
 import com.ruoyi.system.service.IDeviceInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,8 @@ public class AppInteractionController extends BaseController {
     private IDeviceInfoService deviceInfoService;
     @Autowired
     private ICheckLogService checkLogService;
+    @Autowired
+    private ICheckItemDetailService checkItemDetailService;
     @Autowired
     private TokenService tokenService;
     @Autowired
@@ -77,7 +80,7 @@ public class AppInteractionController extends BaseController {
      */
     @PreAuthorize(hasPermi = "system:appInteraction:commitCheckInfo")
     @GetMapping("/commitCheckInfo")
-    public TableDataInfo commitCheckInfo(@RequestBody JSONObject request) {
+    public AjaxResult commitCheckInfo(@RequestBody JSONObject request) {
         LoginUser loginUser = tokenService.getLoginUser();
         String username = loginUser.getUsername();
         String userid = loginUser.getUserid().toString();
@@ -121,6 +124,10 @@ public class AppInteractionController extends BaseController {
             itemDetail.setVersion(version);
             checkItemDetailList.add(itemDetail);
         }
-        return null;
+
+        for (CheckItemDetail itemDetail : checkItemDetailList){
+            checkItemDetailService.insertCheckItemDetail(itemDetail);
+        }
+        return AjaxResult.success();
     }
 }
