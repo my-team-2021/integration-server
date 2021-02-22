@@ -18,7 +18,6 @@
     <artifactId>ruoyi-modules</artifactId>
     <packaging>pom</packaging>
 
-
     <description>
         ruoyi-modules业务模块
     </description>
