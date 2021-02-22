@@ -1,33 +1,25 @@
 package com.ruoyi.system.controller;
 
-import java.util.List;
-import java.io.IOException;
-import javax.servlet.http.HttpServletResponse;
-
-import cn.hutool.core.io.FileUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.extra.qrcode.QrConfig;
 import cn.hutool.json.JSONUtil;
 import com.ruoyi.common.core.utils.poi.ExcelUtil;
-import com.ruoyi.system.domain.DeviceInfo;
-import com.ruoyi.system.domain.EquipmentInfo;
-import com.ruoyi.system.service.IDeviceInfoService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import com.ruoyi.common.log.annotation.Log;
-import com.ruoyi.common.log.enums.BusinessType;
-import com.ruoyi.common.security.annotation.PreAuthorize;
-
 import com.ruoyi.common.core.web.controller.BaseController;
 import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.common.core.web.page.TableDataInfo;
+import com.ruoyi.common.log.annotation.Log;
+import com.ruoyi.common.log.enums.BusinessType;
+import com.ruoyi.common.security.annotation.PreAuthorize;
+import com.ruoyi.common.security.service.TokenService;
+import com.ruoyi.system.api.model.LoginUser;
+import com.ruoyi.system.domain.DeviceInfo;
+import com.ruoyi.system.service.IDeviceInfoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * 设备信息维护Controller
@@ -41,6 +33,8 @@ public class DeviceInfoController extends BaseController
 {
     @Autowired
     private IDeviceInfoService deviceInfoService;
+    @Autowired
+    private TokenService tokenService;
 
     /**
      * 查询设备信息维护列表
@@ -49,8 +43,22 @@ public class DeviceInfoController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(DeviceInfo deviceInfo)
     {
+        deviceInfo.setStatus(1);
         startPage();
         List<DeviceInfo> list = deviceInfoService.selectDeviceInfoList(deviceInfo);
+        return getDataTable(list);
+    }
+
+    /**
+     * 预警信息列表
+     */
+    @PreAuthorize(hasPermi = "system:device:validList")
+    @GetMapping("/validList")
+    public TableDataInfo validList()
+    {
+        LoginUser loginUser = tokenService.getLoginUser();
+        startPage();
+        List<DeviceInfo> list = deviceInfoService.selectCheckEquipsOfUser(loginUser.getUserid());
         return getDataTable(list);
     }
 

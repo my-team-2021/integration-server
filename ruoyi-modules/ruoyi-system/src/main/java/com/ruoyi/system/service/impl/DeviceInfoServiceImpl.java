@@ -1,12 +1,13 @@
 package com.ruoyi.system.service.impl;
 
-import java.util.List;
 import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.system.domain.DeviceInfo;
 import com.ruoyi.system.mapper.DeviceInfoMapper;
 import com.ruoyi.system.service.IDeviceInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 设备信息维护Service业务层处理
@@ -101,7 +102,7 @@ public class DeviceInfoServiceImpl implements IDeviceInfoService
      * @return 设备信息维护
      */
     @Override
-    public List<DeviceInfo> selectCheckEquipsOfUser(String userId) {
+    public List<DeviceInfo> selectCheckEquipsOfUser(Long userId) {
         return deviceInfoMapper.selectValidDevicesByUserId(userId);
     }
 }

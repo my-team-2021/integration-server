@@ -67,5 +67,5 @@ public interface DeviceInfoMapper
      * @param userId 用户id
      * @return 设备信息维护集合
      */
-    public List<DeviceInfo> selectValidDevicesByUserId(String userId);
+    public List<DeviceInfo> selectValidDevicesByUserId(Long userId);
 }

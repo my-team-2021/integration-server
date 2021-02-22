@@ -66,5 +66,5 @@ public interface IDeviceInfoService
      * @param userId 用户ID
      * @return 检修操作记录集合
      */
-    public List<DeviceInfo> selectCheckEquipsOfUser(String userId);
+    public List<DeviceInfo> selectCheckEquipsOfUser(Long userId);
 }

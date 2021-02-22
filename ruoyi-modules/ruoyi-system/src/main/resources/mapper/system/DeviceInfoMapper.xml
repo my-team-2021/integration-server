@@ -137,8 +137,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectValidDevicesByUserId" resultMap="DeviceInfoResult">
         <include refid="selectDeviceInfoVo"/>
-        where status = 1 and id in (
-            select equipment_id from check_user_equipment_rel
+        where status = 1 and next_check_time >= NOW() and id in (
+            select device_id from check_user_device_rel
             where enabled = 1 and user_id = #{userId}
         )
     </select>
