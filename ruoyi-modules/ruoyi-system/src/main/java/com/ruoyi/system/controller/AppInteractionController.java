@@ -55,7 +55,7 @@ public class AppInteractionController extends BaseController {
         LoginUser loginUser = tokenService.getLoginUser();
         startPage();
         List<DeviceInfo> list = deviceInfoService.selectCheckEquipsOfUser(loginUser.getUserid());
-        PageInfo page = (PageInfo) list;
+        PageInfo page = new PageInfo(list);
         JSONObject pageInfo = new JSONObject();
         pageInfo.put("total", page.getTotal());
         pageInfo.put("pageNum", page.getPageNum());
@@ -89,6 +89,7 @@ public class AppInteractionController extends BaseController {
     @PostMapping("/commitCheckInfo")
     public AjaxResult commitCheckInfo(@RequestBody JSONObject request) {
         LoginUser loginUser = tokenService.getLoginUser();
+        logger.info("提交表单的当前用户信息：{}", JSONObject.toJSONString(loginUser));
         String username = loginUser.getUsername();
         String userid = loginUser.getUserid().toString();
 
@@ -106,13 +107,19 @@ public class AppInteractionController extends BaseController {
         checkLog.setVersion(version);
         checkLog.setCreateByName(username);
         checkLog.setCreateBy(userid);
+        checkLog.setUpdateByName(username);
+        checkLog.setUpdateBy(userid);
+        checkLog.setCheckUser(username);
         Date now = new Date();
         checkLog.setCreateTime(now);
+        checkLog.setCheckTime(now);
+        checkLog.setUpdateTime(now);
         checkLogService.insertCheckLog(checkLog);
 
         //2、设备子检查项信息保存
         List<CheckItemDetail> checkItemDetailList = new ArrayList<>();
-        JSONArray jsonArray = request.getJSONArray("check");
+
+        JSONArray jsonArray = JSONObject.parseObject(JSONObject.toJSONString(request)).getJSONArray("check");
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject jsonObject = (JSONObject) jsonArray.get(i);
             CheckItemDetail itemDetail = new CheckItemDetail();
@@ -121,18 +128,21 @@ public class AppInteractionController extends BaseController {
             String imgRemarks = jsonObject.getString("imgRemarks");
             String videoRemarks = jsonObject.getString("videoRemarks");
             itemDetail.setParentId(checkLog.getId());
-            itemDetail.setCreateByName(loginUser.getUsername());
-            itemDetail.setCreateBy(userid);
-            itemDetail.setCreateTime(now);
             itemDetail.setSelecteds(selecteds);
             itemDetail.setFontRemark(fontRemark);
             itemDetail.setImgRemarks(imgRemarks);
             itemDetail.setVideoRemark(videoRemarks);
+            itemDetail.setCreateByName(loginUser.getUsername());
+            itemDetail.setCreateBy(userid);
+            itemDetail.setCreateTime(now);
+            itemDetail.setUpdateByName(username);
+            itemDetail.setUpdateBy(userid);
+            itemDetail.setUpdateTime(now);
             itemDetail.setVersion(version);
             checkItemDetailList.add(itemDetail);
         }
 
-        for (CheckItemDetail itemDetail : checkItemDetailList){
+        for (CheckItemDetail itemDetail : checkItemDetailList) {
             checkItemDetailService.insertCheckItemDetail(itemDetail);
         }
         return AjaxResult.success();
