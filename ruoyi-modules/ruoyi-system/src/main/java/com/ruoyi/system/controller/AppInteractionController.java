@@ -2,11 +2,11 @@ package com.ruoyi.system.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.utils.StringUtils;
 import com.ruoyi.common.core.web.controller.BaseController;
 import com.ruoyi.common.core.web.domain.AjaxResult;
-import com.ruoyi.common.core.web.page.TableDataInfo;
 import com.ruoyi.common.security.annotation.PreAuthorize;
 import com.ruoyi.common.security.service.TokenService;
 import com.ruoyi.system.api.RemoteFileService;
@@ -51,11 +51,18 @@ public class AppInteractionController extends BaseController {
      */
     @PreAuthorize(hasPermi = "system:appInteraction:deviceList")
     @GetMapping("/deviceList")
-    public TableDataInfo deviceList() {
+    public R deviceList() {
         LoginUser loginUser = tokenService.getLoginUser();
         startPage();
         List<DeviceInfo> list = deviceInfoService.selectCheckEquipsOfUser(loginUser.getUserid());
-        return getDataTable(list);
+        PageInfo page = (PageInfo) list;
+        JSONObject pageInfo = new JSONObject();
+        pageInfo.put("total", page.getTotal());
+        pageInfo.put("pageNum", page.getPageNum());
+        pageInfo.put("pages", page.getPages());
+        pageInfo.put("list", page.getList());
+
+        return R.ok(pageInfo);
     }
 
     /**
