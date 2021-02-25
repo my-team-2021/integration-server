@@ -22,9 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * App交互Controller
@@ -72,14 +70,20 @@ public class AppInteractionController extends BaseController {
     @PostMapping("/upload")
     public AjaxResult upload(@RequestParam("uploadFiles") MultipartFile[] files) {
         if (files.length > 0) {
+            Map<String, String> resultMap = new HashMap<>();
             for (MultipartFile file : files) {
+                String originName = file.getOriginalFilename();
                 R<SysFile> fileResult = remoteFileService.upload(file);
                 if (StringUtils.isNull(fileResult) || StringUtils.isNull(fileResult.getData())) {
                     return AjaxResult.error("文件服务异常，请联系管理员");
                 }
+                // 返回的是文件的绝对路径
+                resultMap.put(originName, fileResult.getData().getUrl());
             }
+            return AjaxResult.success(resultMap);
+        } else {
+            return AjaxResult.error("文件上传参数异常");
         }
-        return AjaxResult.success();
     }
 
     /**
