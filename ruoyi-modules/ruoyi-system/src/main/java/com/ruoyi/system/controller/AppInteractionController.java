@@ -18,6 +18,7 @@ import com.ruoyi.system.domain.DeviceInfo;
 import com.ruoyi.system.service.ICheckItemDetailService;
 import com.ruoyi.system.service.ICheckLogService;
 import com.ruoyi.system.service.IDeviceInfoService;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -92,6 +93,7 @@ public class AppInteractionController extends BaseController {
     @PreAuthorize(hasPermi = "system:appInteraction:commitCheckInfo")
     @PostMapping("/commitCheckInfo")
     public AjaxResult commitCheckInfo(@RequestBody JSONObject request) {
+        logger.info("表单提交请求：{}", request.toJSONString());
         LoginUser loginUser = tokenService.getLoginUser();
         logger.info("提交表单的当前用户信息：{}", JSONObject.toJSONString(loginUser));
         String username = loginUser.getUsername();
@@ -124,6 +126,10 @@ public class AppInteractionController extends BaseController {
         List<CheckItemDetail> checkItemDetailList = new ArrayList<>();
 
         JSONArray jsonArray = JSONObject.parseObject(JSONObject.toJSONString(request)).getJSONArray("check");
+        logger.info("check集合为:{}", jsonArray.toJSONString());
+        if (CollectionUtils.isEmpty(jsonArray)) {
+            return AjaxResult.error("check表单为空");
+        }
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject jsonObject = (JSONObject) jsonArray.get(i);
             CheckItemDetail itemDetail = new CheckItemDetail();
